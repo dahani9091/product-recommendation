@@ -75,18 +75,17 @@ def view_all_users():
 ############################################################################################################
 
 def main():
-    """Login"""
 
-    st.title("Login")
 
     menu = ["Home","Login","SignUp"]
     choice = st.sidebar.selectbox("Menu",menu)
 
     if choice == "Home":
-        st.subheader("Home")
+        st.title("Home")
 
     elif choice == "Login":
-        st.subheader("Login Section")
+        login_holder = st.empty()
+        login_holder.title("Login Section")
 
         username = st.sidebar.text_input("User Name")
         password = st.sidebar.text_input("Password",type='password')
@@ -97,20 +96,22 @@ def main():
 
             result = login_user(username,check_hashes(password,hashed_pswd))
             if result:
-
+                login_holder.empty()
+                st.title("Dashboard")
                 st.success("Logged In as {}".format(username))
 
                 task = st.selectbox("Task",["Personal information","Analytics"])
                 if task == "Personal information":
                     st.subheader("Information")
+                    st.write(f"User : {username}")
 
                 elif task == "Analytics":
                     def get_brand_names():
                         df = pd.read_csv('tokens/combine_token_for_app.csv')
                         df = df.drop_duplicates(subset=['brand_name'], keep='first')
                         return list(df['brand_name'])
-                    st.subheader("Analytics")
-                    st.title("Suppliment Recommandation")
+                    st.subheader("Analytics : ")
+                    st.subheader("Suppliment Recommandation")
 
                     with st.form(key = "form1"):
                         brand_name = st.selectbox(label = "Enter the product brand",options=get_brand_names())
@@ -150,7 +151,7 @@ def main():
 
 
     elif choice == "SignUp":
-        st.subheader("Create New Account")
+        st.title("Create New Account")
         new_user = st.text_input("Username")
         new_password = st.text_input("Password",type='password')
 
